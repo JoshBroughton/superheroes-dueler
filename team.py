@@ -1,7 +1,7 @@
 """
 Defines a team class that manages a team of superheroes
 """
-
+import random
 
 class Team:
     """
@@ -39,3 +39,38 @@ class Team:
     def add_hero(self, hero):
         '''Add Hero object to self.heroes.'''
         self.heroes.append(hero)
+
+    def stats(self):
+        '''Print team statistics'''
+        for hero in self.heroes:
+            kill_death_ratio = hero.kills / hero.deaths
+            print(f"{hero.name} Kill/Deaths:{kill_death_ratio}")
+
+    def revive_heroes(self):
+        ''' Reset all heroes health to starting_health'''
+        for hero in self.heroes:
+            hero.current_health = hero.starting_health
+
+    def attack(self, other_team):
+        ''' Battle each team against each other.'''
+
+        living_heroes = list()
+        living_opponents = list()
+
+        for hero in self.heroes:
+            living_heroes.append(hero)
+
+        for hero in other_team.heroes:
+            living_opponents.append(hero)
+
+        while len(living_heroes) > 0 and len(living_opponents)> 0:
+            fighter = random.choice(living_heroes)
+            opponent = random.choice(living_opponents)
+
+            fighter.fight(opponent)
+
+            if not fighter.is_alive():
+                living_heroes.remove(fighter)
+            
+            if not opponent.is_alive():
+                living_opponents.remove(opponent)

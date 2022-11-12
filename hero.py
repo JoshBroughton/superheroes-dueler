@@ -4,6 +4,7 @@ from ability import Ability
 from armor import Armor
 from weapon import Weapon
 
+
 class Hero:
     # We want our hero to have a default "starting_health",
     # so we can set that in the function header.
@@ -20,6 +21,8 @@ class Hero:
         self.name = name
         self.starting_health = starting_health
         self.current_health = starting_health
+        self.deaths = 0
+        self.kills = 0
 
     # def fight(self, opponent):
     #     fighters = [self.name, opponent.name]
@@ -76,7 +79,7 @@ class Hero:
         damage -= self.defend()
         if damage > 50:
             print('Ouch')
-        elif damage > 25: 
+        elif damage > 25:
             print('Wowza')
         elif damage > 10:
             print('hmm')
@@ -91,13 +94,13 @@ class Hero:
             self.current_health -= damage
         if self.current_health <= 0:
             print('I am slain')
-    
-    def is_alive(self):  
+
+    def is_alive(self):
         '''Return True or False depending on whether the hero is alive or not.
         '''
         return self.current_health >= 0
 
-    def fight(self, opponent):  
+    def fight(self, opponent):
         ''' Current Hero will take turns fighting the opponent hero passed in.
         '''
         # TODO: Fight each hero until a victor emerges.
@@ -116,15 +119,30 @@ class Hero:
             self.take_damage(opponent.attack())
             if not opponent.is_alive() and self.is_alive():
                 print(f'{self.name} has won!')
+                opponent.add_death(1)
+                self.add_kill(1)
             elif not self.is_alive() and opponent.is_alive():
                 print(f'{opponent.name} has won!')
+                self.add_death(1)
+                opponent.add_kill(1)
             elif not self.is_alive() and not opponent.is_alive():
                 print('Mutual destruction has occured')
-    
+                opponent.add_death(1)
+                self.add_kill(1)
+                self.add_death(1)
+                opponent.add_kill(1)
+
     def add_weapon(self, weapon):
         """Add weapon to self.abilities"""
         self.abilities.append(weapon)
-        
+
+    def add_kill(self, num_kills):
+        ''' Update self.kills by num_kills amount'''
+        self.kills += num_kills
+
+    def add_death(self, num_deaths):
+        ''' Update deaths with num_deaths'''
+        self.deaths += num_deaths
 
 
 if __name__ == "__main__":
